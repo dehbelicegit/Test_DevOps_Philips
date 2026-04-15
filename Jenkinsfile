@@ -20,7 +20,7 @@ pipeline {
                 sh '''
                 mkdir -p build
                 cd build
-                cmake ..
+                cmake ../calculator
                 make
                 '''
             }
