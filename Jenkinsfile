@@ -10,43 +10,48 @@ pipeline {
         stage('Checkout') {
             agent { label 'build' }
             steps {
-               checkout scm
+                checkout scm
             }
         }
 
         stage('Build') {
             agent { label 'build' }
             steps {
-                sh '''
-                mkdir -p build
-                cd build
-                cmake ../calculator
-                make
-                '''
+                dir('calculator') {
+                    sh '''
+                    mkdir -p build
+                    cd build
+                    cmake ..
+                    make
+                    '''
+                }
             }
         }
 
         stage('Test') {
             agent { label 'test' }
             steps {
-                sh '''
-                cd build
-                ctest --output-on-failure
-                '''
+                dir('calculator/build') {
+                    sh '''
+                    ctest --output-on-failure
+                    '''
+                }
             }
         }
 
         stage('Package') {
-            agent any
+            agent { label 'build' }
             steps {
-                sh 'tar -czf artifact.tar.gz build/'
+                sh '''
+                tar -czf artifact.tar.gz calculator/build/
+                '''
             }
         }
 
         stage('Archive') {
             agent any
             steps {
-                archiveArtifacts artifacts: '*.tar.gz'
+                archiveArtifacts artifacts: 'artifact.tar.gz'
             }
         }
     }
