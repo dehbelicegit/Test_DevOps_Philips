@@ -27,7 +27,7 @@ pipeline {
             agent { label 'build' }
             steps {
                 dir('calculator') {
-                    sh 'make'
+                    sh 'make clean && make'
                 }
             }
         }
@@ -36,7 +36,7 @@ pipeline {
             agent { label 'test' }
             steps {
                 dir('calculator') {
-                    sh 'make unittest'
+                    sh 'make -C tests clean && make unittest'
                 }
             }
         }
