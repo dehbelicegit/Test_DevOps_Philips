@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             agent { label 'build' }
             steps {
-                git 'https://github.com/dehbelicegit/Test_DevOps_Philips.git'
+               checkout scm
             }
         }
 
