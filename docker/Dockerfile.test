@@ -1,0 +1,22 @@
+FROM jenkins/inbound-agent
+
+USER root
+
+# Install build tools and GTest source
+RUN apt-get update && \
+    apt-get install -y \
+        build-essential \
+        git \
+        cmake \
+        libgtest-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Compile GTest and install to /usr/local (required by tests/Makefile)
+RUN cd /usr/src/googletest && \
+    cmake -DCMAKE_INSTALL_PREFIX=/usr/local . && \
+    make && \
+    make install && \
+    ldconfig
+
+USER jenkins
