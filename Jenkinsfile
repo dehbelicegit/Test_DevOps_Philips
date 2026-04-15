@@ -44,7 +44,7 @@ pipeline {
         stage('Package') {
             agent { label 'build' }
             steps {
-                sh 'tar -czf artifact.tar.gz -C calculator/src/bin .'
+                sh 'tar -czf artifact.tar.gz -C calculator/bin .'
                 archiveArtifacts artifacts: 'artifact.tar.gz', fingerprint: true
             }
         }
